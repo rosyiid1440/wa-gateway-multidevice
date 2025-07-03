@@ -1,0 +1,9 @@
+# Direktori yang berisi data sesi sensitif dan file-file yang diunduh
+/sessions/
+/chat_history/
+/media_downloads/
+/baileys_auth_info/
+
+# File log dan dependensi Node.js
+/node_modules/
+npm-debug.log

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Session</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+             <a href="/" style="text-decoration:none;"><h1>WA Gateway</h1></a>
+            <p id="session-title">Manage Session: <b>...</b></p>
+        </aside>
+
+        <main class="main-panel">
+            <div class="card">
+                <nav class="tabs">
+                    <button class="tab-button active" data-tab="messaging">Kirim Pesan</button>
+                    <button class="tab-button" data-tab="groups">Grup</button>
+                    <button class="tab-button" data-tab="profile">Profil Saya</button>
+                    <button class="tab-button" data-tab="contacts">Kontak</button>
+                </nav>
+
+                <div class="tab-content-container">
+                    <div id="messaging" class="tab-content active">
+                        <h3>Kirim Pesan</h3>
+                        <form class="form-grid" id="send-text-form">
+                            <input type="text" name="number" placeholder="Nomor Penerima" required>
+                            <textarea name="message" placeholder="Isi pesan..." required></textarea>
+                            <button type="submit">Kirim Teks</button>
+                        </form>
+                         <h3>Kirim Media</h3>
+                        <form class="form-grid" id="send-media-form">
+                            <input type="text" name="number" placeholder="Nomor Penerima" required>
+                            <input type="text" name="url" placeholder="URL Media" required>
+                            <input type="text" name="caption" placeholder="Caption (opsional)">
+                            <select name="type">
+                                <option value="image">Gambar</option>
+                                <option value="video">Video</option>
+                                <option value="audio">Audio</option>
+                                <option value="voice">Voice Note</option>
+                                <option value="file">File/Dokumen</option>
+                            </select>
+                            <button type="submit">Kirim Media</button>
+                        </form>
+                    </div>
+
+                    <div id="groups" class="tab-content">
+                        <h3>Manajemen Grup</h3>
+                        <form class="form-grid" id="group-form">
+                            <input type="text" name="groupId" placeholder="Group JID (cth: 123...@g.us)">
+                            <input type="text" name="participants" placeholder="Nomor Partisipan (pisahkan koma)">
+                            <div class="form-actions">
+                                <button type="button" data-action="add">Tambah</button>
+                                <button type="button" data-action="remove" class="btn-danger">Keluarkan</button>
+                                <button type="button" data-action="promote">Promote</button>
+                                <button type="button" data-action="demote">Demote</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div id="profile" class="tab-content">... Konten untuk Profil ...</div>
+                    <div id="contacts" class="tab-content">... Konten untuk Kontak ...</div>
+                </div>
+            </div>
+            <div class="card log-viewer">
+                <h2>Log Sesi Ini</h2>
+                <div id="log-container"></div>
+            </div>
+        </main>
+    </div>
+    <script src="session-script.js"></script>
+</body>
+</html>

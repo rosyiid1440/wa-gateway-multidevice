@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dokumentasi API WhatsApp Gateway</title>
+    <style>
+        :root {
+            --bg-main: #1e1e1e;
+            --bg-card: #2d2d2d;
+            --text-primary: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --primary: #00a884;
+            --border: #444;
+            --font: 'Inter', sans-serif;
+            --font-mono: 'Courier New', Courier, monospace;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+        body { font-family: var(--font); background-color: var(--bg-main); color: var(--text-primary); line-height: 1.6; margin: 0; padding: 2rem; }
+        .container { max-width: 900px; margin: 0 auto; }
+        header h1 { color: var(--primary); text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 1rem; margin-bottom: 2rem; }
+        .endpoint-group { margin-top: 3rem; }
+        .endpoint-group h2 { border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+        .endpoint { background-color: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; margin-top: 1.5rem; overflow: hidden; }
+        .endpoint-header { display: flex; align-items: center; gap: 1rem; padding: 1rem; background-color: rgba(0,0,0,0.2); flex-wrap: wrap; }
+        .endpoint-method { font-weight: 600; padding: 0.3rem 0.6rem; border-radius: 4px; color: white; }
+        .method-get { background-color: #0d6efd; }
+        .method-post { background-color: #198754; }
+        .method-put { background-color: #fd7e14; }
+        .method-delete { background-color: #dc3545; }
+        .endpoint-path { font-family: var(--font-mono); font-size: 1.1rem; word-break: break-all; }
+        .endpoint-body { padding: 1rem; }
+        .endpoint-body p { margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.95rem;}
+        .endpoint-body h4 { margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--primary); }
+        pre { background-color: #111; padding: 1rem; border-radius: 6px; white-space: pre-wrap; word-wrap: break-word; font-family: var(--font-mono); font-size: 0.9rem; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { text-align: left; padding: 0.8rem; border: 1px solid var(--border); }
+        th { background-color: #333; }
+        code { background-color: #444; padding: 2px 4px; border-radius: 3px; font-family: var(--font-mono); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Dokumentasi API WhatsApp Gateway</h1>
+        </header>
+
+        <section class="endpoint-group">
+            <h2>Manajemen Sesi</h2>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/sessions/start</span></div>
+                <div class="endpoint-body">
+                    <p>Memulai sesi baru atau menghubungkan kembali sesi yang sudah ada.</p>
+                    <h4>Request Body:</h4>
+                    <pre><code>{
+    "sessionId": "sesi-kantor",
+    "webhookUrl": "https://your-app.com/webhook"
+}</code></pre>
+                </div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/sessions</span></div>
+                <div class="endpoint-body"><p>Mendapatkan daftar semua sesi yang sedang berjalan di server.</p></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-delete">DELETE</span><span class="endpoint-path">/api/sessions/{sessionId}/logout</span></div>
+                <div class="endpoint-body"><p>Logout dari sesi dan menghapus file autentikasi.</p></div>
+            </div>
+        </section>
+
+        <section class="endpoint-group">
+            <h2>Manajemen Profil (Akun Sendiri)</h2>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/{sessionId}/profile</span></div>
+                <div class="endpoint-body"><p>Mendapatkan informasi profil dari sesi yang sedang login (ID dan Nama).</p></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-put">PUT</span><span class="endpoint-path">/api/{sessionId}/profile/name</span></div>
+                <div class="endpoint-body"><p>Mengubah nama tampilan (display name) WhatsApp Anda.</p><h4>Request Body:</h4><pre><code>{ "name": "Nama Baru Saya" }</code></pre></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-put">PUT</span><span class="endpoint-path">/api/{sessionId}/profile/status</span></div>
+                <div class="endpoint-body"><p>Mengubah status "Info" (About) WhatsApp Anda.</p><h4>Request Body:</h4><pre><code>{ "status": "Sedang Sibuk! 🚀" }</code></pre></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/{sessionId}/profile/picture</span></div>
+                <div class="endpoint-body"><p>Mendapatkan URL foto profil Anda. Membuka URL ini di browser akan langsung menampilkan gambar.</p></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-put">PUT</span><span class="endpoint-path">/api/{sessionId}/profile/picture</span></div>
+                <div class="endpoint-body"><p>Mengatur foto profil baru dari URL publik.</p><h4>Request Body:</h4><pre><code>{ "url": "https://example.com/foto.jpg" }</code></pre></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-delete">DELETE</span><span class="endpoint-path">/api/{sessionId}/profile/picture</span></div>
+                <div class="endpoint-body"><p>Menghapus foto profil Anda saat ini.</p></div>
+            </div>
+        </section>
+
+        <section class="endpoint-group">
+            <h2>Pengiriman Pesan & Interaksi</h2>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/{sessionId}/sendText</span></div>
+                <div class="endpoint-body"><p>Mengirim pesan teks.</p><h4>Request Body:</h4><pre><code>{
+    "number": "6281234567890",
+    "message": "Halo, ini pesan dari API."
+}</code></pre></div>
+            </div>
+             <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/{sessionId}/sendMedia</span></div>
+                <div class="endpoint-body"><p>Mengirim pesan media dari URL. Tipe yang didukung: <code>image</code>, <code>video</code>, <code>audio</code>, <code>voice</code>, <code>file</code>.</p><h4>Request Body:</h4><pre><code>{
+    "number": "6281234567890",
+    "type": "image",
+    "url": "https://example.com/gambar.jpg",
+    "caption": "Ini caption gambarnya."
+}</code></pre></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/{sessionId}/sendLocation</span></div>
+                <div class="endpoint-body"><p>Mengirim pesan lokasi.</p><h4>Request Body:</h4><pre><code>{
+    "number": "6281234567890",
+    "latitude": -7.257472,
+    "longitude": 112.752088
+}</code></pre></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/{sessionId}/sendContactVcard</span></div>
+                <div class="endpoint-body"><p>Mengirim kontak dalam format vCard.</p><h4>Request Body:</h4><pre><code>{
+    "number": "6281234567890",
+    "fullName": "John Doe",
+    "phoneNumber": "6289876543210"
+}</code></pre></div>
+            </div>
+             <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/{sessionId}/sendSeen</span></div>
+                <div class="endpoint-body"><p>Menandai pesan sebagai telah dibaca (centang biru).</p><h4>Request Body:</h4><pre><code>{
+    "key": {
+        "remoteJid": "6281234567890@s.whatsapp.net",
+        "id": "ID_PESAN_TARGET",
+        "fromMe": false
+    }
+}</code></pre></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/{sessionId}/startTyping</span></div>
+                <div class="endpoint-body"><p>Menampilkan status "sedang mengetik..." pada target.</p><h4>Request Body:</h4><pre><code>{ "number": "6281234567890" }</code></pre></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/{sessionId}/stopTyping</span></div>
+                <div class="endpoint-body"><p>Menghilangkan status "sedang mengetik...".</p><h4>Request Body:</h4><pre><code>{ "number": "6281234567890" }</code></pre></div>
+            </div>
+             <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-put">PUT</span><span class="endpoint-path">/api/{sessionId}/reaction</span></div>
+                <div class="endpoint-body"><p>Memberi reaksi emoji pada sebuah pesan. Kirim string kosong untuk menghapus reaksi.</p><h4>Request Body:</h4><pre><code>{
+    "key": {
+        "remoteJid": "6281234567890@s.whatsapp.net",
+        "id": "ID_PESAN_TARGET",
+        "fromMe": false
+    },
+    "reaction": "👍"
+}</code></pre></div>
+            </div>
+        </section>
+        
+        <section class="endpoint-group">
+            <h2>Manajemen Chat</h2>
+             <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/{sessionId}/chats</span></div>
+                <div class="endpoint-body"><p>Mendapatkan daftar semua chat yang tersimpan di memori.</p></div>
+            </div>
+             <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/{sessionId}/chats/{chatId}/messages</span></div>
+                <div class="endpoint-body"><p>Mendapatkan pesan dari sebuah chat (terbatas pada yang ada di memori).</p></div>
+            </div>
+             <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/{sessionId}/chats/{chatId}/messages/read</span></div>
+                <div class="endpoint-body"><p>Menandai semua pesan di chat sebagai sudah dibaca.</p></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-delete">DELETE</span><span class="endpoint-path">/api/{sessionId}/chats/{chatId}/messages</span></div>
+                <div class="endpoint-body"><p>Membersihkan (clear) semua pesan dari sebuah chat.</p></div>
+            </div>
+             <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-delete">DELETE</span><span class="endpoint-path">/api/{sessionId}/chats/{chatId}/messages/{messageId}</span></div>
+                <div class="endpoint-body"><p>Menghapus satu pesan spesifik.</p><h4>Request Body:</h4><pre><code>{ "key": { ... } }</code></pre></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-put">PUT</span><span class="endpoint-path">/api/{sessionId}/chats/{chatId}/messages/{messageId}</span></div>
+                <div class="endpoint-body"><p>Mengedit pesan teks yang pernah Anda kirim.</p><h4>Request Body:</h4><pre><code>{
+    "key": { ... },
+    "newText": "Ini adalah teks yang sudah diedit."
+}</code></pre></div>
+            </div>
+             <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/{sessionId}/chats/{chatId}/archive</span></div>
+                <div class="endpoint-body"><p>Mengarsipkan sebuah chat.</p></div>
+            </div>
+             <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/{sessionId}/chats/{chatId}/unarchive</span></div>
+                <div class="endpoint-body"><p>Mengeluarkan chat dari arsip.</p></div>
+            </div>
+        </section>
+
+        <section class="endpoint-group">
+            <h2>Manajemen Grup</h2>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/{sessionId}/groups</span></div>
+                <div class="endpoint-body"><p>Membuat grup baru.</p><h4>Request Body:</h4><pre><code>{
+    "subject": "Nama Grup Baru",
+    "participants": ["62812...", "62813..."]
+}</code></pre></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/{sessionId}/groups</span></div>
+                <div class="endpoint-body"><p>Mendapatkan daftar semua grup dimana Anda menjadi partisipan.</p></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/{sessionId}/groups/{id}</span></div>
+                <div class="endpoint-body"><p>Mendapatkan metadata (info detail) dari sebuah grup.</p></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/{sessionId}/groups/{id}/leave</span></div>
+                <div class="endpoint-body"><p>Keluar dari sebuah grup.</p></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/{sessionId}/groups/{id}/participants/add</span></div>
+                <div class="endpoint-body"><p>Menambahkan partisipan ke grup.</p><h4>Request Body:</h4><pre><code>{ "participants": ["62812..."] }</code></pre></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/{sessionId}/groups/{id}/admin/promote</span></div>
+                <div class="endpoint-body"><p>Menjadikan partisipan sebagai admin.</p><h4>Request Body:</h4><pre><code>{ "participants": ["62812..."] }</code></pre></div>
+            </div>
+        </section>
+
+        <section class="endpoint-group">
+            <h2>Manajemen Kontak</h2>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/{sessionId}/contacts/all</span></div>
+                <div class="endpoint-body"><p>Mendapatkan seluruh daftar kontak dari memori store.</p></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/{sessionId}/contacts/check-exists?number=...</span></div>
+                <div class="endpoint-body"><p>Memeriksa apakah sebuah nomor terdaftar di WhatsApp.</p></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/{sessionId}/contacts/about?number=...</span></div>
+                <div class="endpoint-body"><p>Mendapatkan status "Info" (About) dari sebuah kontak.</p></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/{sessionId}/contacts/block</span></div>
+                <div class="endpoint-body"><p>Memblokir sebuah kontak.</p><h4>Request Body:</h4><pre><code>{ "number": "62812..." }</code></pre></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/{sessionId}/contacts/unblock</span></div>
+                <div class="endpoint-body"><p>Membuka blokir kontak.</p><h4>Request Body:</h4><pre><code>{ "number": "62812..." }</code></pre></div>
+            </div>
+        </section>
+
+        <section class="endpoint-group">
+            <h2>Manajemen Status WhatsApp</h2>
+             <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/{sessionId}/status/text</span></div>
+                <div class="endpoint-body"><p>Membuat status (story) berupa teks.</p><h4>Request Body:</h4><pre><code>{ "text": "Ini status dari API!" }</code></pre></div>
+            </div>
+             <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/{sessionId}/status/image</span></div>
+                <div class="endpoint-body"><p>Membuat status (story) berupa gambar dari URL.</p><h4>Request Body:</h4><pre><code>{ "url": "https://example.com/gambar.jpg", "caption": "Caption status" }</code></pre></div>
+            </div>
+            <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/{sessionId}/status/delete</span></div>
+                <div class="endpoint-body"><p>Menghapus status yang pernah dibuat. Membutuhkan objek 'key' dari response saat membuat status.</p><h4>Request Body:</h4><pre><code>{ "key": { ... } }</code></pre></div>
+            </div>
+        </section>
+
+        <section class="endpoint-group">
+            <h2>Manajemen Presence (Online/Offline)</h2>
+             <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/{sessionId}/presence</span></div>
+                <div class="endpoint-body"><p>Mengatur status online/offline Anda.</p><h4>Request Body:</h4><pre><code>{ "presence": "unavailable" } </code></pre></div>
+            </div>
+             <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-post">POST</span><span class="endpoint-path">/api/{sessionId}/presence/{chatId}/subscribe</span></div>
+                <div class="endpoint-body"><p>Mulai memantau status online/offline dari sebuah kontak.</p></div>
+            </div>
+             <div class="endpoint">
+                <div class="endpoint-header"><span class="endpoint-method method-get">GET</span><span class="endpoint-path">/api/{sessionId}/presence/{chatId}</span></div>
+                <div class="endpoint-body"><p>Mendapatkan informasi presence terakhir dari sebuah kontak (otomatis subscribe jika belum).</p></div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

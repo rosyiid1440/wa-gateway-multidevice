@@ -1,0 +1,317 @@
+{
+    "_type": "export",
+    "__export_format": 4,
+    "__export_date": "2025-07-02T16:30:00.000Z",
+    "__export_source": "gemini-ai",
+    "resources": [
+      {
+        "_id": "wrk_1",
+        "parentId": null,
+        "modified": 1719941400000,
+        "created": 1719941400000,
+        "name": "WA Gateway API",
+        "description": "",
+        "scope": "collection",
+        "_type": "workspace"
+      },
+      {
+        "_id": "fld_session",
+        "parentId": "wrk_1",
+        "modified": 1719941400000,
+        "created": 1719941400000,
+        "name": "[SESSION] Management",
+        "description": "",
+        "environment": {},
+        "environmentPropertyOrder": null,
+        "_type": "request_group"
+      },
+      {
+        "_id": "req_session_start",
+        "parentId": "fld_session",
+        "modified": 1719941400000,
+        "created": 1719941400000,
+        "url": "{{ _.base_url }}/api/sessions/start",
+        "name": "Start New Session",
+        "description": "",
+        "method": "POST",
+        "body": {
+          "mimeType": "application/json",
+          "text": "{\n\t\"sessionId\": \"{{ _.sessionId }}\",\n\t\"webhookUrl\": \"https://webhook.site/your-unique-id\"\n}"
+        },
+        "parameters": [],
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "authentication": {},
+        "metaSortKey": -10,
+        "_type": "request"
+      },
+      {
+        "_id": "req_session_status",
+        "parentId": "fld_session",
+        "modified": 1719941400000,
+        "created": 1719941400000,
+        "url": "{{ _.base_url }}/api/sessions/{{ _.sessionId }}/status",
+        "name": "Get Session Status",
+        "description": "",
+        "method": "GET",
+        "body": {},
+        "parameters": [],
+        "headers": [],
+        "authentication": {},
+        "metaSortKey": -9,
+        "_type": "request"
+      },
+      {
+        "_id": "req_session_qr",
+        "parentId": "fld_session",
+        "modified": 1719941400000,
+        "created": 1719941400000,
+        "url": "{{ _.base_url }}/api/sessions/{{ _.sessionId }}/qr",
+        "name": "Get QR Code",
+        "description": "",
+        "method": "GET",
+        "body": {},
+        "parameters": [],
+        "headers": [],
+        "authentication": {},
+        "metaSortKey": -8,
+        "_type": "request"
+      },
+      {
+        "_id": "req_session_webhook",
+        "parentId": "fld_session",
+        "modified": 1719941400000,
+        "created": 1719941400000,
+        "url": "{{ _.base_url }}/api/sessions/{{ _.sessionId }}/webhook",
+        "name": "Set Webhook URL",
+        "description": "",
+        "method": "POST",
+        "body": {
+          "mimeType": "application/json",
+          "text": "{\n\t\"webhookUrl\": \"https://webhook.site/your-new-id\"\n}"
+        },
+        "parameters": [],
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "authentication": {},
+        "metaSortKey": -7,
+        "_type": "request"
+      },
+      {
+        "_id": "req_session_logout",
+        "parentId": "fld_session",
+        "modified": 1719941400000,
+        "created": 1719941400000,
+        "url": "{{ _.base_url }}/api/sessions/{{ _.sessionId }}/logout",
+        "name": "Logout and Delete Session",
+        "description": "",
+        "method": "DELETE",
+        "body": {},
+        "parameters": [],
+        "headers": [],
+        "authentication": {},
+        "metaSortKey": -6,
+        "_type": "request"
+      },
+      {
+        "_id": "fld_chat",
+        "parentId": "wrk_1",
+        "modified": 1719941400000,
+        "created": 1719941400000,
+        "name": "[CHAT] Interaction",
+        "description": "",
+        "environment": {},
+        "environmentPropertyOrder": null,
+        "_type": "request_group"
+      },
+      {
+        "_id": "req_chat_presence",
+        "parentId": "fld_chat",
+        "modified": 1719941400000,
+        "created": 1719941400000,
+        "url": "{{ _.base_url }}/api/{{ _.sessionId }}/chats/presence",
+        "name": "Set Presence (Typing)",
+        "description": "",
+        "method": "POST",
+        "body": {
+          "mimeType": "application/json",
+          "text": "{\n\t\"number\": \"6281234567890\",\n\t\"presence\": \"composing\"\n}"
+        },
+        "parameters": [],
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "authentication": {},
+        "metaSortKey": 0,
+        "_type": "request"
+      },
+      {
+        "_id": "fld_message",
+        "parentId": "wrk_1",
+        "modified": 1719941400000,
+        "created": 1719941400000,
+        "name": "[MESSAGE] Sending",
+        "description": "",
+        "environment": {},
+        "environmentPropertyOrder": null,
+        "_type": "request_group"
+      },
+      {
+        "_id": "req_msg_text",
+        "parentId": "fld_message",
+        "modified": 1719941400000,
+        "created": 1719941400000,
+        "url": "{{ _.base_url }}/api/{{ _.sessionId }}/messages/send/text",
+        "name": "Send Text Message",
+        "description": "",
+        "method": "POST",
+        "body": {
+          "mimeType": "application/json",
+          "text": "{\n\t\"number\": \"6281234567890\",\n\t\"message\": \"Hello from Insomnia! 🚀\"\n}"
+        },
+        "parameters": [],
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "authentication": {},
+        "metaSortKey": 0,
+        "_type": "request"
+      },
+      {
+        "_id": "req_msg_media",
+        "parentId": "fld_message",
+        "modified": 1719941400000,
+        "created": 1719941400000,
+        "url": "{{ _.base_url }}/api/{{ _.sessionId }}/messages/send/media",
+        "name": "Send Media from URL",
+        "description": "",
+        "method": "POST",
+        "body": {
+          "mimeType": "application/json",
+          "text": "{\n\t\"number\": \"6281234567890\",\n\t\"type\": \"image\",\n\t\"url\": \"https://raw.githubusercontent.com/github/explore/main/topics/whatsapp/whatsapp.png\",\n\t\"caption\": \"This is a test image.\"\n}"
+        },
+        "parameters": [],
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "authentication": {},
+        "metaSortKey": 1,
+        "_type": "request"
+      },
+      {
+        "_id": "fld_group",
+        "parentId": "wrk_1",
+        "modified": 1719941400000,
+        "created": 1719941400000,
+        "name": "[GROUP] Management",
+        "description": "",
+        "environment": {},
+        "environmentPropertyOrder": null,
+        "_type": "request_group"
+      },
+      {
+        "_id": "req_group_list",
+        "parentId": "fld_group",
+        "modified": 1719941400000,
+        "created": 1719941400000,
+        "url": "{{ _.base_url }}/api/{{ _.sessionId }}/groups",
+        "name": "Get All Groups",
+        "description": "",
+        "method": "GET",
+        "body": {},
+        "parameters": [],
+        "headers": [],
+        "authentication": {},
+        "metaSortKey": 0,
+        "_type": "request"
+      },
+      {
+        "_id": "fld_user",
+        "parentId": "wrk_1",
+        "modified": 1719941400000,
+        "created": 1719941400000,
+        "name": "[USER] Management",
+        "description": "",
+        "environment": {},
+        "environmentPropertyOrder": null,
+        "_type": "request_group"
+      },
+      {
+        "_id": "req_user_check",
+        "parentId": "fld_user",
+        "modified": 1719941400000,
+        "created": 1719941400000,
+        "url": "{{ _.base_url }}/api/{{ _.sessionId }}/users/check",
+        "name": "Check if Number Exists",
+        "description": "",
+        "method": "GET",
+        "body": {},
+        "parameters": [
+          {
+            "id": "pair_1",
+            "name": "number",
+            "value": "6281234567890",
+            "description": ""
+          }
+        ],
+        "headers": [],
+        "authentication": {},
+        "metaSortKey": 0,
+        "_type": "request"
+      },
+      {
+        "_id": "req_user_avatar",
+        "parentId": "fld_user",
+        "modified": 1719941400000,
+        "created": 1719941400000,
+        "url": "{{ _.base_url }}/api/{{ _.sessionId }}/users/6281234567890@s.whatsapp.net/avatar",
+        "name": "Get User Avatar",
+        "description": "",
+        "method": "GET",
+        "body": {},
+        "parameters": [],
+        "headers": [],
+        "authentication": {},
+        "metaSortKey": 1,
+        "_type": "request"
+      },
+      {
+        "_id": "env_1",
+        "parentId": "wrk_1",
+        "modified": 1719941400000,
+        "created": 1719941400000,
+        "name": "Base Environment",
+        "data": {
+          "base_url": "http://localhost:3000",
+          "sessionId": "default-session"
+        },
+        "dataPropertyOrder": {
+          "&": [
+            "base_url",
+            "sessionId"
+          ]
+        },
+        "color": null,
+        "isPrivate": false,
+        "metaSortKey": 1719941400000,
+        "_type": "environment"
+      }
+    ]
+  }

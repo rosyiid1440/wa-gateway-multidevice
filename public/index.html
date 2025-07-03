@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gateway Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h1>WA Gateway</h1>
+            <p>Manajemen Sesi WhatsApp</p>
+        </aside>
+
+        <main class="main-panel">
+            <section class="card session-starter">
+                <h2>Mulai Sesi Baru</h2>
+                <form id="start-session-form" class="form-row">
+                    <input type="text" id="session-name-input" placeholder="Masukkan Nama Sesi..." required>
+                    <button type="submit">Start</button>
+                </form>
+            </section>
+
+            <section class="card session-list">
+                <h2>Sesi Aktif</h2>
+                <div id="session-list-container">
+                    </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="qr-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h3>Pindai QR untuk Sesi: <b id="modal-session-id"></b></h3>
+            <div id="modal-qr-image-container"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
