@@ -142,7 +142,7 @@ const sendWebhook = async (payload) => {
     const session = sessions.get(payload.sessionId);
     if (!session || !session.webhookUrl) return;
     try {
-        await axios.post(session.webhookUrl, payload, { headers: { 'Content-Type': 'application/json' }});
+        await axios.get(session.webhookUrl, payload, { headers: { 'Content-Type': 'application/json' }});
     } catch (error) {
         console.error(`Gagal mengirim webhook HTTP untuk sesi ${payload.sessionId}:`, error.message);
     }
@@ -159,6 +159,12 @@ const startSession = async (sessionId, phoneNumber = null, webhookUrl = null) =>
     const sessionAuthDir = path.join(SESSIONS_DIR, sessionId);
     if (!fs.existsSync(sessionAuthDir)) {
         fs.mkdirSync(sessionAuthDir, { recursive: true });
+    }
+
+    // --- Menyimpan Webhook saat Sesi Dimulai ---
+    if (webhookUrl) {
+        const webhookFilePath = path.join(sessionAuthDir, 'webhook.json');
+        fs.writeFileSync(webhookFilePath, JSON.stringify({ url: webhookUrl }));
     }
     
     // =======================================================
@@ -210,10 +216,17 @@ const startSession = async (sessionId, phoneNumber = null, webhookUrl = null) =>
 
     // Event listener utama
     sock.ev.on('connection.update', async (update) => {
-        const { connection, lastDisconnect } = update;
+        const { connection, lastDisconnect, qr } = update;
         sessionData.status = connection;
 
-        sendWebhook({ event: 'session.status', sessionId, data: { status: connection } });
+        // --- PERBAIKAN DI SINI ---
+        // Simpan QR ke dalam data sesi jika ada
+        if (qr) {
+            sessionData.qr = qr;
+            // Kita juga kirim event QR via webhook dari sini agar terpusat
+            sendWebhook({ event: 'qr', sessionId, data: qr });
+        }
+        // -------------------------
 
         if (connection === 'close') {
             const statusCode = new Boom(lastDisconnect?.error)?.output?.statusCode;
@@ -336,6 +349,10 @@ const getSession = (sessionId) => sessions.get(sessionId);
 
 const deleteSession = (sessionId) => {
     const sessionAuthDir = path.join(SESSIONS_DIR, sessionId);
+    const webhookFilePath = path.join(sessionAuthDir, 'webhook.json');
+    if (fs.existsSync(webhookFilePath)) {
+        fs.unlinkSync(webhookFilePath);
+    }
     sessions.delete(sessionId);
     if (fs.existsSync(sessionAuthDir)) {
         fs.rmSync(sessionAuthDir, { recursive: true, force: true });
@@ -347,5 +364,6 @@ module.exports = {
     startSession,
     getSession,
     deleteSession,
-    sessions
+    sessions,
+    SESSIONS_DIR
 };

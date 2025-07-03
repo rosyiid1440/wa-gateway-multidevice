@@ -1,0 +1,18 @@
+services:
+  whatsapp-gateway:
+    # Build image dari Dockerfile di direktori saat ini
+    build: .
+    # Beri nama yang mudah dikenali untuk kontainer
+    container_name: wa-gateway
+    # Selalu restart kontainer jika mati, kecuali jika dihentikan secara manual
+    restart: unless-stopped
+    # Mapping port: port 3000 di komputer Anda akan terhubung ke port 3000 di dalam kontainer
+    ports:
+      - "3000:3000"
+    # VOLUMES: Bagian paling penting untuk menyimpan data Anda secara permanen
+    # Ini menghubungkan folder di komputer Anda ke folder di dalam kontainer.
+    # Data akan tetap ada meskipun kontainer dihapus atau diperbarui.
+    volumes:
+      - ./sessions:/usr/src/app/sessions
+      - ./chat_history:/usr/src/app/chat_history
+      - ./media_downloads:/usr/src/app/media_downloads

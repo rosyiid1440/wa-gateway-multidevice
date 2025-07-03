@@ -1,15 +1,18 @@
 const express = require('express');
 const qrcode = require('qrcode');
-const { startSession, getSession, deleteSession } = require('../services/baileys.service');
-const { sessions } = require('../services/baileys.service'); // Anda perlu mengekspor 'sessions' dari service
+const { startSession, getSession, deleteSession, sessions, SESSIONS_DIR } = require('../services/baileys.service');
+const path = require('path'); // <-- Tambahkan import
+const fs = require('fs');     // <-- Tambahkan import
 
 const router = express.Router();
 
+// Setelah diperbaiki
 router.get('/', (req, res) => {
     const sessionList = Array.from(sessions.values()).map(s => ({
         id: s.id,
         status: s.status,
-        user: s.sock?.user
+        user: s.sock?.user,
+        webhookUrl: s.webhookUrl // <-- TAMBAHKAN BARIS INI
     }));
     res.status(200).json(sessionList);
 });
@@ -70,10 +73,25 @@ router.post('/:sessionId/webhook', (req, res) => {
     const { sessionId } = req.params;
     const { webhookUrl } = req.body;
     const session = getSession(sessionId);
-    if (!session) return res.status(404).json({ error: 'Sesi tidak ditemukan.' });
 
-    session.webhookUrl = webhookUrl || null;
-    res.status(200).json({ success: true, message: `Webhook untuk sesi ${sessionId} telah diatur ke: ${session.webhookUrl}` });
+    if (!session) {
+        return res.status(404).json({ error: 'Sesi tidak ditemukan.' });
+    }
+
+    try {
+        const sessionAuthDir = path.join(SESSIONS_DIR, sessionId);
+        const webhookFilePath = path.join(sessionAuthDir, 'webhook.json');
+        
+        // Simpan ke file
+        fs.writeFileSync(webhookFilePath, JSON.stringify({ url: webhookUrl || null }));
+
+        // Update juga di memori
+        session.webhookUrl = webhookUrl || null;
+        
+        res.status(200).json({ success: true, message: `Webhook untuk sesi ${sessionId} telah diatur.` });
+    } catch(e) {
+        res.status(500).json({ success: false, error: e.message });
+    }
 });
 
 module.exports = router;

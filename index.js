@@ -3,8 +3,8 @@ const http = require('http'); // <-- TAMBAHKAN INI
 const path = require('path'); // <-- Tambahkan ini
 const fs = require('fs');   // <-- Tambahkan ini
 const { initWebSocket } = require('./sockets/handler'); // <-- TAMBAHKAN INI
-const { startSession } = require('./services/baileys.service'); // <-- Tambahkan ini
 const sessionMiddleware = require('./middleware/session.middleware');
+const { startSession, SESSIONS_DIR } = require('./services/baileys.service'); // <-- Impor SESSIONS_DIR
 
 // Import semua rute
 const sessionRoutes = require('./routes/session.routes');
@@ -36,18 +36,31 @@ app.get('/api/docs', (req, res) => {
 // Gunakan rute untuk manajemen sesi (tanpa middleware sesi)
 app.use('/api/sessions', sessionRoutes);
 
+// --- GANTI SELURUH FUNGSI INI ---
 function restartExistingSessions() {
-    const sessionsDir = path.join(__dirname, 'sessions');
     console.log('🔄 Memeriksa sesi yang ada untuk di-restart...');
     
-    if (fs.existsSync(sessionsDir)) {
-        const sessionFolders = fs.readdirSync(sessionsDir);
+    if (fs.existsSync(SESSIONS_DIR)) {
+        const sessionFolders = fs.readdirSync(SESSIONS_DIR);
         for (const sessionFolder of sessionFolders) {
-            const sessionPath = path.join(sessionsDir, sessionFolder);
+            const sessionPath = path.join(SESSIONS_DIR, sessionFolder);
             if (fs.statSync(sessionPath).isDirectory()) {
-                console.log(`Mencoba me-restart sesi: ${sessionFolder}`);
-                // Panggil startSession untuk setiap folder sesi yang ditemukan
-                startSession(sessionFolder); 
+                
+                // Baca URL webhook dari file jika ada
+                let webhookUrl = null;
+                const webhookFilePath = path.join(sessionPath, 'webhook.json');
+                if (fs.existsSync(webhookFilePath)) {
+                    try {
+                        const webhookData = JSON.parse(fs.readFileSync(webhookFilePath, 'utf-8'));
+                        webhookUrl = webhookData.url;
+                    } catch (e) {
+                        console.error(`Gagal membaca webhook.json untuk sesi ${sessionFolder}:`, e);
+                    }
+                }
+                
+                console.log(`Mencoba me-restart sesi: ${sessionFolder} dengan webhook: ${webhookUrl || 'tidak ada'}`);
+                // Panggil startSession dengan webhook yang sudah dimuat
+                startSession(sessionFolder, null, webhookUrl); 
             }
         }
     } else {

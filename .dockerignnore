@@ -1,0 +1,18 @@
+# Abaikan dependensi lokal, karena akan diinstall di dalam kontainer
+node_modules
+
+# Abaikan file log npm
+npm-debug.log
+
+# Abaikan direktori data yang akan kita jadikan volume
+sessions
+chat_history
+media_downloads
+baileys_auth_info
+
+# Abaikan file konfigurasi Docker dan Git
+.git
+.gitignore
+.dockerignore
+Dockerfile
+docker-compose.yml
